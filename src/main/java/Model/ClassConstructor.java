@@ -1,16 +1,23 @@
 package Model;
 
+import java.util.List;
 import java.util.Set;
 
 public class ClassConstructor extends NamedEntity{
 
-    private Set<String> input;
+    public ClassConstructor(String name, List<String> input, List<String> status) {
+        super.setName(name);
+        super.setStatus(status);
+        this.input = input;
+    }
 
-    public Set<String> getInput() {
+    private List<String> input;
+
+    public List<String> getInput() {
         return input;
     }
 
-    public void setInput(Set<String> input) {
+    public void setInput(List<String> input) {
         this.input = input;
     }
 

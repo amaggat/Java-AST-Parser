@@ -1,11 +1,13 @@
 package Model;
 
+import java.util.List;
+
 public abstract class NamedEntity {
 
     private String type = new String();
     private String name = new String();
     private int id;
-    private String status = new String();
+    private List<String> status;
     private String Annotation = new String();
 
     public String getName() {
@@ -24,11 +26,11 @@ public abstract class NamedEntity {
         this.id = id;
     }
 
-    public String getStatus() {
+    public List<String> getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(List<String> status) {
         this.status = status;
     }
 

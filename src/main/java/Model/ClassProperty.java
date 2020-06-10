@@ -4,9 +4,15 @@ import java.util.Set;
 
 public class ClassProperty extends NamedEntity{
 
+
     private Set<ClassMethod> methodName;
     private Set<ClassVariable> varName;
     private Set<ClassConstructor> consName;
+
+    public ClassProperty()
+    {
+
+    }
 
     public ClassProperty(Set<ClassMethod> methodName, Set<ClassVariable> varName, Set<ClassConstructor> consName) {
         this.methodName = methodName;
