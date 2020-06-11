@@ -51,7 +51,7 @@ public class ParseCode {
         });
 
 
-        return(buffer);
+        return buffer;
     }
 
 }

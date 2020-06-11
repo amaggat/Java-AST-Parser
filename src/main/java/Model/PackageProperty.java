@@ -21,4 +21,9 @@ public class PackageProperty extends NamedEntity{
     public void setClassPropertySet(Set<ClassProperty> classPropertySet) {
         this.classPropertySet = classPropertySet;
     }
+
+    public void addClassProperty(ClassProperty classProperty)
+    {
+        classPropertySet.add(classProperty);
+    }
 }

@@ -14,6 +14,9 @@ public class ReadMultipleFile {
 
     PackageProperty IPackage;
 
+    public ReadMultipleFile() {
+    }
+
     public String getFileContent (String filepath) throws FileNotFoundException, IOException
     {
         BufferedReader br = new BufferedReader(new FileReader(filepath));
@@ -28,28 +31,38 @@ public class ReadMultipleFile {
         return sb.toString();
     }
 
-    public List<File> getAllFile (String directoryPath) throws FileNotFoundException, IOException
+    public PackageProperty getAllFile (String directoryPath) throws FileNotFoundException, IOException
     {
 
         File folder = new File(directoryPath);
         File[] files = folder.listFiles();
 
+
         for(File file : files)
         {
+
+
+
             if(file.isFile())
             {
                 if(Files.getFileExtension(file.getName()).equals("java"))
                 {
-                    parser.visit(file.getPath());
+
+                    System.out.println(file.getName());
+//                    IPackage.addClassProperty(parNameser.visit(file.getName()));
                 }
             }
             else if (file.isDirectory())
             {
+                System.out.println(file.getPath());
                 getAllFile(file.getAbsolutePath());
+                System.out.println();
+                System.out.println();
+
             }
         }
 
-        return allJavaFile;
+        return IPackage;
     }
 
 }
