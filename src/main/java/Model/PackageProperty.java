@@ -1,9 +1,10 @@
 package Model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class PackageProperty extends NamedEntity{
-    private Set<ClassProperty> classPropertySet;
+    private Set<ClassProperty> classPropertySet = new HashSet<>();
 
     public PackageProperty()
     {

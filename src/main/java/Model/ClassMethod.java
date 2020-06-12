@@ -23,15 +23,4 @@ public class ClassMethod extends NamedEntity{
         this.input = input;
     }
 
-    @Override
-    public String toString() {
-        String buffer = new String();
-
-        for(String i : input)
-        {
-            buffer = i + ", ";
-        }
-
-        return super.getStatus() + " " + super.getName() + "(" + buffer + ")";
-    }
 }

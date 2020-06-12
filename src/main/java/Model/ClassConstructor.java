@@ -20,16 +20,4 @@ public class ClassConstructor extends NamedEntity{
     public void setInput(List<String> input) {
         this.input = input;
     }
-
-    @Override
-    public String toString() {
-        String buffer = new String();
-
-        for(String i : input)
-        {
-            buffer = i + ", ";
-        }
-
-        return super.getStatus() + " " + super.getName() + "(" + buffer + ")" + ": " + super.getType();
-    }
 }

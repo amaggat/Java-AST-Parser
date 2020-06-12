@@ -1,13 +1,14 @@
 package Model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ClassProperty extends NamedEntity{
 
 
-    private Set<ClassMethod> methodName;
-    private Set<ClassVariable> varName;
-    private Set<ClassConstructor> consName;
+    private Set<ClassMethod> methodName = new HashSet<>();
+    private Set<ClassVariable> varName = new HashSet<>();
+    private Set<ClassConstructor> consName = new HashSet<>();
 
     public ClassProperty()
     {
