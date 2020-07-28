@@ -2,9 +2,9 @@ package Model;
 
 import java.util.List;
 
-public class ClassVariable extends NamedEntity{
+public class Field extends NamedEntity{
 
-    public ClassVariable(String type, String name, List<String> status)
+    public Field(String type, String name, List<String> status)
     {
         super.setName(name);
         super.setType(type);

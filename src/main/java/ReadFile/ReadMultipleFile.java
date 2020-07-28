@@ -11,7 +11,7 @@ public class ReadMultipleFile {
 
     private List<File> allJavaFile;
 
-    PackageProperty IPackage =new PackageProperty();
+    packageProperties IPackage =new packageProperties();
 
     public ReadMultipleFile() {
     }
@@ -30,7 +30,7 @@ public class ReadMultipleFile {
         return sb.toString();
     }
 
-    public PackageProperty getAllFile (String directoryPath) throws FileNotFoundException, IOException
+    public packageProperties getAllFile (String directoryPath) throws FileNotFoundException, IOException
     {
 
         File folder = new File(directoryPath);
@@ -49,6 +49,7 @@ public class ReadMultipleFile {
 
                     System.out.println(file.getName());
                     IPackage.addClassProperty(visit(file.getPath()));
+                    System.out.println();
                 }
             }
             else if (file.isDirectory())
@@ -56,7 +57,7 @@ public class ReadMultipleFile {
                 System.out.println(file.getPath());
                 getAllFile(file.getAbsolutePath());
                 System.out.println();
-                System.out.println();
+
 
             }
         }
@@ -64,9 +65,9 @@ public class ReadMultipleFile {
         return IPackage;
     }
 
-    public ClassProperty visit(String filePath) throws FileNotFoundException, IOException
+    public classProperties visit(String filePath) throws FileNotFoundException, IOException
     {
-        final ClassProperty buffer = new ClassProperty();
+        final classProperties buffer = new classProperties();
 
         ASTParser parser = ASTParser.newParser(AST.JLS13);
         char[] fileContent = getFileContent(filePath).toCharArray();
@@ -78,9 +79,11 @@ public class ReadMultipleFile {
 
             @Override
             public boolean visit(FieldDeclaration node) {
-                ClassVariable var = new ClassVariable(node.getType().toString(), node.fragments().toString() ,node.modifiers());
-                System.out.println(var);
-                buffer.addVar(var);
+                VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
+                Field field = new Field(node.getType().toString(), z.getName().toString() ,node.modifiers());
+                System.out.println(field.getStatus() + " " + field.getType() + " " + field.getName());
+
+                buffer.addField(field);
                 return false;
             }
 
@@ -89,16 +92,14 @@ public class ReadMultipleFile {
             {
                 if(!node.isConstructor())
                 {
-                    ClassMethod method = new ClassMethod(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(),node.parameters());
-                    System.out.println(method.getInput());
-                    System.out.println();
+                    Method method = new Method(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(),node.parameters());
+                    System.out.println(method.getStatus() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
                     buffer.addMethod(method);
                 }
                 else
                 {
-                    ClassConstructor cons = new ClassConstructor(node.getName().toString(), node.parameters(), node.modifiers());
-                    System.out.println(cons.getName());
-                    System.out.println();
+                    Constructor cons = new Constructor(node.getName().toString(), node.parameters(), node.modifiers());
+//                    System.out.println(cons.getName());
                     buffer.addCons(cons);
                 }
                 return false;

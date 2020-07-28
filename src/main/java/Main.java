@@ -1,5 +1,4 @@
-import Model.ClassProperty;
-import Model.PackageProperty;
+import Model.classProperties;
 import ReadFile.ReadMultipleFile;
 
 import java.io.IOException;
@@ -15,9 +14,9 @@ public class Main {
         
         String filePath = new String(inp.nextLine());
 
-        Set<ClassProperty> allClass= readfile.getAllFile(filePath).getClassPropertySet();
+        Set<classProperties> allClass= readfile.getAllFile(filePath).getClassPropertiesSet();
         
-        for(ClassProperty pack: allClass)
+        for(classProperties pack: allClass)
         System.out.println(pack.getName());
     }
 }
