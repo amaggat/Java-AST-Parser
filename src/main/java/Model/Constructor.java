@@ -6,7 +6,7 @@ public class Constructor extends NamedEntity{
 
     public Constructor(String name, List<String> parameters, List<String> status) {
         super.setName(name);
-        super.setStatus(status);
+        super.setModifiers(status);
         this.parameters = parameters;
     }
 

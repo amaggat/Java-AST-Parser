@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import org.eclipse.jdt.core.dom.*;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReadMultipleFile {
@@ -81,7 +82,7 @@ public class ReadMultipleFile {
             public boolean visit(FieldDeclaration node) {
                 VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
                 Field field = new Field(node.getType().toString(), z.getName().toString() ,node.modifiers());
-                System.out.println(field.getStatus() + " " + field.getType() + " " + field.getName());
+                System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
 
                 buffer.addField(field);
                 return false;
@@ -92,14 +93,56 @@ public class ReadMultipleFile {
             {
                 if(!node.isConstructor())
                 {
-                    Method method = new Method(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(),node.parameters());
-                    System.out.println(method.getStatus() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
+                    List param = node.parameters();
+                    List<String> parameterStrList = new ArrayList<>();
+
+                    if(!param.isEmpty())
+                    {
+                        for(Object x : param)
+                        {
+                            SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) x;
+                            String parameter = new String();
+                            if(!variableDeclaration.modifiers().isEmpty())
+                            {
+                                parameter = variableDeclaration.modifiers().toString() + " " + variableDeclaration.getType();
+                            }
+                            else
+                            {
+                                parameter = variableDeclaration.getType().toString();
+                            }
+                            parameterStrList.add(parameter);
+                        }
+                    }
+
+                    Method method = new Method(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(), parameterStrList);
+                    System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
                     buffer.addMethod(method);
                 }
                 else
                 {
-                    Constructor cons = new Constructor(node.getName().toString(), node.parameters(), node.modifiers());
-//                    System.out.println(cons.getName());
+                    List param = node.parameters();
+                    List<String> parameterStrList = new ArrayList<>();
+
+                    if(!param.isEmpty())
+                    {
+                        for(Object x : param)
+                        {
+                            SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) x;
+                            String parameter = new String();
+                            if(!variableDeclaration.modifiers().isEmpty())
+                            {
+                                parameter = variableDeclaration.modifiers().toString() + " " + variableDeclaration.getType();
+                            }
+                            else
+                            {
+                                parameter = variableDeclaration.getType().toString();
+                            }
+                            parameterStrList.add(parameter);
+                        }
+                    }
+
+                    Constructor cons = new Constructor(node.getName().toString(), parameterStrList, node.modifiers());
+                    System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
                     buffer.addCons(cons);
                 }
                 return false;

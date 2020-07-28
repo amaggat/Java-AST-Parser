@@ -8,12 +8,12 @@ public class Field extends NamedEntity{
     {
         super.setName(name);
         super.setType(type);
-        super.setStatus(status);
+        super.setModifiers(status);
     }
 
     @Override
     public String toString() {
 
-        return super.getStatus() + " " + super.getName() + ": " + super.getType();
+        return super.getModifiers() + " " + super.getName() + ": " + super.getType();
     }
 }

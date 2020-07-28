@@ -8,7 +8,7 @@ public class Method extends NamedEntity{
     {
         super.setType(type);
         super.setName(name);
-        super.setStatus(status);
+        super.setModifiers(status);
         this.parameters = parameters;
     }
 
@@ -16,6 +16,11 @@ public class Method extends NamedEntity{
 
     public List<String> getParameters() {
         return parameters;
+    }
+
+    public void addParameters(String parameter)
+    {
+        parameters.add(parameter);
     }
 
     public void setParameters(List<String> parameters) {
