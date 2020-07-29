@@ -40,9 +40,6 @@ public class ReadMultipleFile {
 
         for(File file : files)
         {
-
-
-
             if(file.isFile())
             {
                 if(Files.getFileExtension(file.getName()).equals("java"))
@@ -55,11 +52,8 @@ public class ReadMultipleFile {
             }
             else if (file.isDirectory())
             {
-                System.out.println(file.getPath());
                 getAllFile(file.getAbsolutePath());
                 System.out.println();
-
-
             }
         }
 
@@ -148,7 +142,6 @@ public class ReadMultipleFile {
                 return false;
             }
         });
-
 
         return buffer;
     }
