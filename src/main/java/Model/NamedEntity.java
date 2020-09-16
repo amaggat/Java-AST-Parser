@@ -1,5 +1,8 @@
 package Model;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
+import org.eclipse.jdt.core.dom.Modifier;
 import java.util.List;
 
 public abstract class NamedEntity {
@@ -7,7 +10,7 @@ public abstract class NamedEntity {
     private String type = new String();
     private String name = new String();
     private int id;
-    private List<String> Modifiers;
+    private List<Modifier> Modifiers;
     private String Annotation = new String();
 
     public String getName() {
@@ -26,11 +29,11 @@ public abstract class NamedEntity {
         this.id = id;
     }
 
-    public List<String> getModifiers() {
+    public List<Modifier> getModifiers() {
         return Modifiers;
     }
 
-    public void setModifiers(List<String> modifiers) {
+    public void setModifiers(List<Modifier> modifiers) {
         this.Modifiers = modifiers;
     }
 

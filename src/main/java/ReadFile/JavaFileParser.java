@@ -1,27 +1,26 @@
 package ReadFile;
 
-import Model.Constructor;
-import Model.Field;
-import Model.Method;
-import Model.classProperties;
+import Model.*;
 import org.eclipse.jdt.core.dom.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class JavaFileParser {
 
 
-    public classProperties visit(String filePath) throws FileNotFoundException, IOException
+    public classProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
         final classProperties buffer = new classProperties();
+        final Set<Dependency> dependency = new HashSet<>();
         ReadMultipleFile getContent = new ReadMultipleFile();
 
-        ASTParser parser = ASTParser.newParser(AST.JLS13);
+        ASTParser parser = ASTParser.newParser(AST.JLS8);
         char[] fileContent = getContent.getFileContent(filePath).toCharArray();
         parser.setSource(fileContent);
 
@@ -31,11 +30,7 @@ public class JavaFileParser {
 
             @Override
             public boolean visit(FieldDeclaration node) {
-//                VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
-//                Field field = new Field(node.getType().toString(), z.getName().toString() ,node.modifiers());
-//                System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
-
-                buffer.addField(JavaFieldParser(node));
+                buffer.addField(JavaFieldParser(node, fileName));
                 return false;
             }
 
@@ -44,57 +39,11 @@ public class JavaFileParser {
             {
                 if(!node.isConstructor())
                 {
-//                    List param = node.parameters();
-//                    List<String> parameterStrList = new ArrayList<>();
-//
-//                    if(!param.isEmpty())
-//                    {
-//                        for(Object x : param)
-//                        {
-//                            SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) x;
-//                            String parameter = new String();
-//                            if(!variableDeclaration.modifiers().isEmpty())
-//                            {
-//                                parameter = variableDeclaration.modifiers().toString() + " " + variableDeclaration.getType();
-//                            }
-//                            else
-//                            {
-//                                parameter = variableDeclaration.getType().toString();
-//                            }
-//                            parameterStrList.add(parameter);
-//                        }
-//                    }
-//
-//                    Method method = new Method(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(), parameterStrList);
-//                    System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
-                    buffer.addMethod(JavaMethodParser(node));
+                    buffer.addMethod(JavaMethodParser(node, fileName));
                 }
                 else
                 {
-//                    List param = node.parameters();
-//                    List<String> parameterStrList = new ArrayList<>();
-//
-//                    if(!param.isEmpty())
-//                    {
-//                        for(Object x : param)
-//                        {
-//                            SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) x;
-//                            String parameter = new String();
-//                            if(!variableDeclaration.modifiers().isEmpty())
-//                            {
-//                                parameter = variableDeclaration.modifiers().toString() + " " + variableDeclaration.getType();
-//                            }
-//                            else
-//                            {
-//                                parameter = variableDeclaration.getType().toString();
-//                            }
-//                            parameterStrList.add(parameter);
-//                        }
-//                    }
-//
-//                    Constructor cons = new Constructor(node.getName().toString(), parameterStrList, node.modifiers());
-//                    System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
-                    buffer.addCons(JavaConstructorParser(node));
+                    buffer.addCons(JavaConstructorParser(node, fileName));
                 }
                 return false;
             }
@@ -103,34 +52,75 @@ public class JavaFileParser {
         return buffer;
     }
 
-    Method JavaMethodParser (MethodDeclaration node)
+    Method JavaMethodParser (MethodDeclaration node, String fileName)
     {
-        List param = node.parameters();
-        List<String> parameterStrList = new ArrayList<>();
+        List<String> parameterStrList = JavaParameter(node);
+        String returnType = node.getReturnType2().toString();
+        String methodName = node.getName().toString();
 
-        if(!param.isEmpty())
-        {
-            for(Object x : param)
-            {
-                SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) x;
-                String parameter = new String();
-                if(!variableDeclaration.modifiers().isEmpty())
-                {
-                    parameter = variableDeclaration.modifiers().toString() + " " + variableDeclaration.getType();
-                }
-                else
-                {
-                    parameter = variableDeclaration.getType().toString();
-                }
-                parameterStrList.add(parameter);
-            }
-        }
-        Method method = new Method(node.getReturnType2().toString(), node.getName().toString(), node.modifiers(), parameterStrList);
-        System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
+        Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList);
+        JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
+//        System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
         return method;
     }
 
-    Constructor JavaConstructorParser(MethodDeclaration node)
+    Constructor JavaConstructorParser(MethodDeclaration node, String fileName)
+    {
+        List<String> parameterStrList = JavaParameter(node);
+        String constructorName = node.getName().toString();
+
+        Constructor cons = new Constructor(constructorName, parameterStrList, node.modifiers());
+        JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
+//        System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
+        return cons;
+    }
+
+    Field JavaFieldParser(FieldDeclaration node, String fileName)
+    {
+        VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
+        String fieldName = z.getName().toString();
+        String fieldType = node.getType().toString();
+
+        Field field = new Field(fieldType, fieldName ,node.modifiers());
+       JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
+//        System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
+        return field;
+    }
+
+    Set<Dependency> JavaSpringDependency(List<Modifier> node, String callName)
+    {
+
+        Set<Dependency> dep = new HashSet<>();
+        List<Modifier> mod = node;
+        if(!mod.isEmpty())
+        {
+            for(Object o: mod)
+            {
+                if(o instanceof MarkerAnnotation)
+                {
+                    String type = ((MarkerAnnotation) o).getTypeName().toString();
+                    dep.add(new Dependency(type, callName));
+                    System.out.println(type);
+                }
+                else if(o instanceof NormalAnnotation)
+                {
+                    String type = ((NormalAnnotation) o).values().toString();
+                    dep.add(new Dependency(type, callName));
+                    System.out.println(type);
+                }
+                else if(o instanceof SingleMemberAnnotation)
+                {
+                    String type = ((SingleMemberAnnotation) o).getValue().toString();
+                    dep.add(new Dependency(type, callName));
+                    System.out.println(type);
+                }
+            }
+
+        }
+        return dep;
+    }
+
+    List<String> JavaParameter(MethodDeclaration node)
     {
         List param = node.parameters();
         List<String> parameterStrList = new ArrayList<>();
@@ -152,17 +142,6 @@ public class JavaFileParser {
                 parameterStrList.add(parameter);
             }
         }
-
-        Constructor cons = new Constructor(node.getName().toString(), parameterStrList, node.modifiers());
-        System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
-        return cons;
-    }
-
-    Field JavaFieldParser(FieldDeclaration node)
-    {
-        VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
-        Field field = new Field(node.getType().toString(), z.getName().toString() ,node.modifiers());
-        System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
-        return field;
+        return parameterStrList;
     }
 }

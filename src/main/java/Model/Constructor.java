@@ -1,10 +1,13 @@
 package Model;
 
+
+import org.eclipse.jdt.core.dom.Modifier;
+
 import java.util.List;
 
 public class Constructor extends NamedEntity{
 
-    public Constructor(String name, List<String> parameters, List<String> status) {
+    public Constructor(String name, List<String> parameters, List<Modifier> status) {
         super.setName(name);
         super.setModifiers(status);
         this.parameters = parameters;
