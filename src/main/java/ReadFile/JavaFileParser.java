@@ -5,14 +5,12 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class JavaFileParser {
 
+    final ArrayList<String> annotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
 
     public classProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
@@ -27,6 +25,12 @@ public class JavaFileParser {
         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
         cu.accept(new ASTVisitor() {
+
+            @Override
+            public boolean visit(TypeDeclaration node)
+            {
+                return false;
+            }
 
             @Override
             public boolean visit(FieldDeclaration node) {
@@ -92,27 +96,44 @@ public class JavaFileParser {
 
         Set<Dependency> dep = new HashSet<>();
         List<Modifier> mod = node;
+
         if(!mod.isEmpty())
         {
             for(Object o: mod)
             {
-                if(o instanceof MarkerAnnotation)
+                if(o instanceof MarkerAnnotation && ((MarkerAnnotation) o).isMarkerAnnotation())
                 {
                     String type = ((MarkerAnnotation) o).getTypeName().toString();
-                    dep.add(new Dependency(type, callName));
-                    System.out.println(type);
+
+                    if(annotationDependency.contains(type))
+                    {
+                        dep.add(new Dependency(type, callName));
+                        System.out.println(type);
+                    }
+
                 }
-                else if(o instanceof NormalAnnotation)
+                else if(o instanceof NormalAnnotation && ((NormalAnnotation) o).isNormalAnnotation())
                 {
-                    String type = (((NormalAnnotation) o).values().toString());
-                    dep.add(new Dependency(type, callName));
-                    System.out.println(type);
+                    String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
+                    List<MemberValuePair> value = ((NormalAnnotation) o).values();
+
+                    if(annotationDependency.contains(type))
+                    {
+                        dep.add(new Dependency(type, callName));
+                        System.out.println(type + " " + value);
+                    }
+
                 }
-                else if(o instanceof SingleMemberAnnotation)
+                else if(o instanceof SingleMemberAnnotation && ((SingleMemberAnnotation) o).isSingleMemberAnnotation())
                 {
-                    String type = ((SingleMemberAnnotation) o).getValue().toString();
-                    dep.add(new Dependency(type, callName));
-                    System.out.println(type);
+                    String value = ((SingleMemberAnnotation) o).getValue().toString();
+                    String type = ((SingleMemberAnnotation) o).getTypeName().toString();
+
+                    if(annotationDependency.contains(type))
+                    {
+                        dep.add(new Dependency(value, callName, type));
+                        System.out.println(type + " " + value);
+                    }
                 }
             }
         }
