@@ -21,14 +21,6 @@ public class Dependency {
         this.value = value;
     }
 
-//    public String getCalledClass() {
-//        return calledClass;
-//    }
-//
-//    public void setCalledClass(String calledClass) {
-//        this.calledClass = calledClass;
-//    }
-
     public String getCallClass() {
         return callClass;
     }

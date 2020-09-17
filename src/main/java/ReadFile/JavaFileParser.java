@@ -104,7 +104,7 @@ public class JavaFileParser {
                 }
                 else if(o instanceof NormalAnnotation)
                 {
-                    String type = ((NormalAnnotation) o).values().toString();
+                    String type = (((NormalAnnotation) o).values().toString());
                     dep.add(new Dependency(type, callName));
                     System.out.println(type);
                 }
@@ -115,7 +115,6 @@ public class JavaFileParser {
                     System.out.println(type);
                 }
             }
-
         }
         return dep;
     }
