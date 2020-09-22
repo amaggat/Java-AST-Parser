@@ -1,7 +1,9 @@
 package ReadFile;
 
-import Model.*;
 import org.eclipse.jdt.core.dom.*;
+
+import Package.*;
+import Class.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,12 +12,12 @@ import java.util.*;
 
 public class JavaFileParser {
 
-    final ArrayList<String> annotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
+    final ArrayList<String> springAnnotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
 
     public ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
         final ClassProperties buffer = new ClassProperties();
-        final List<Dependency> dependency = new ArrayList<>();
+        final List<Dependency> annotationDependency = new ArrayList<>();
         ReadMultipleFile getContent = new ReadMultipleFile();
 
         ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -102,17 +104,16 @@ public class JavaFileParser {
     {
 
         List<Dependency> dep = new ArrayList<>();
-        List<Modifier> mod = node;
 
-        if(!mod.isEmpty())
+        if(!node.isEmpty())
         {
-            for(Object o: mod)
+            for(Object o: node)
             {
                 if(o instanceof MarkerAnnotation && ((MarkerAnnotation) o).isMarkerAnnotation())
                 {
                     String type = ((MarkerAnnotation) o).getTypeName().toString();
 
-                    if(annotationDependency.contains(type))
+                    if(springAnnotationDependency.contains(type))
                     {
                         dep.add(new Dependency(type, callName));
 //                        System.out.println(type);
@@ -124,7 +125,7 @@ public class JavaFileParser {
                     String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
                     List<MemberValuePair> value = ((NormalAnnotation) o).values();
 
-                    if(annotationDependency.contains(type))
+                    if(springAnnotationDependency.contains(type))
                     {
                         dep.add(new Dependency(type, callName));
 //                        System.out.println(type + " " + value);
@@ -136,7 +137,7 @@ public class JavaFileParser {
                     String value = ((SingleMemberAnnotation) o).getValue().toString();
                     String type = ((SingleMemberAnnotation) o).getTypeName().toString();
 
-                    if(annotationDependency.contains(type))
+                    if(springAnnotationDependency.contains(type))
                     {
                         dep.add(new Dependency(value, callName, type));
 //                        System.out.println(type + " " + value);

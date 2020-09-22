@@ -1,6 +1,7 @@
 package ReadFile;
 
-import Model.*;
+import Package.ClassProperties;
+import Project.PackageProperties;
 import com.google.common.io.Files;
 
 import java.io.*;

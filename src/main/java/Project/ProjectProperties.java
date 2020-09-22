@@ -1,9 +1,11 @@
-package Model;
+package Project;
 
+
+import Model.NamedEntity;
 
 import java.util.Set;
 
-public class ProjectProperties extends NamedEntity{
+public class ProjectProperties extends NamedEntity {
 
     private Set<PackageProperties> packagePropertiesSet;
 

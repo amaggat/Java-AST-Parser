@@ -1,13 +1,14 @@
-package Model;
+package Class;
 
+
+import Model.NamedEntity;
 import org.eclipse.jdt.core.dom.Modifier;
+
 import java.util.List;
 
-public class Method extends NamedEntity{
+public class Constructor extends NamedEntity {
 
-    public Method(String type, String name, List<Modifier> status, List<String> parameters)
-    {
-        super.setType(type);
+    public Constructor(String name, List<String> parameters, List<Modifier> status) {
         super.setName(name);
         super.setModifiers(status);
         this.parameters = parameters;
@@ -19,18 +20,12 @@ public class Method extends NamedEntity{
         return parameters;
     }
 
-    public void addParameters(String parameter)
-    {
-        parameters.add(parameter);
-    }
-
     public void setParameters(List<String> parameters) {
         this.parameters = parameters;
     }
 
     public void print()
     {
-        System.out.println("Method: " + super.getType() + " " + super.getName() + " " + this.getParameters() + " " + super.getModifiers());
+        System.out.println("Constructor: " + super.getName() + " " + this.getParameters() + " " + super.getModifiers());
     }
-
 }

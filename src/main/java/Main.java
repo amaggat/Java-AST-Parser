@@ -1,4 +1,4 @@
-import Model.ClassProperties;
+import Package.ClassProperties;
 import ReadFile.ReadMultipleFile;
 
 import java.io.IOException;
@@ -13,6 +13,7 @@ public class Main {
         ReadMultipleFile readfile = new ReadMultipleFile();
         
         String filePath = new String(inp.nextLine());
+        // /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
 
         List<ClassProperties> allClass= readfile.getAllFile(filePath).getClassPropertiesSet();
 
@@ -20,6 +21,7 @@ public class Main {
         {
             classProperties.print();
         }
+
 
     }
 }

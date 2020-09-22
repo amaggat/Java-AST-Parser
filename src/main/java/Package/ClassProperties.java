@@ -1,12 +1,13 @@
-package Model;
+package Package;
 
-
+import Class.*;
+import Model.NamedEntity;
 import org.eclipse.jdt.core.dom.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ClassProperties extends NamedEntity{
+public class ClassProperties extends NamedEntity {
 
     private List<Method> methodName = new ArrayList<>();
     private List<Field> fieldName = new ArrayList<>();

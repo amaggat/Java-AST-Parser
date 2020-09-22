@@ -1,9 +1,10 @@
-package Model;
+package Class;
 
+import Model.NamedEntity;
 import org.eclipse.jdt.core.dom.Modifier;
 import java.util.List;
 
-public class Field extends NamedEntity{
+public class Field extends NamedEntity {
 
     public Field(String type, String name, List<Modifier> status)
     {

@@ -1,4 +1,4 @@
-package Model;
+package Package;
 
 import org.eclipse.jdt.core.dom.MemberValuePair;
 
