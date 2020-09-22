@@ -12,13 +12,13 @@ public class Main {
 
         ReadMultipleFile readfile = new ReadMultipleFile();
         
-        String filePath = new String("/home/amaggat/IdeaProjects/Spring-Petclinic/src/main/java");
+        String filePath = new String(inp.nextLine());
 
         Set<classProperties> allClass= readfile.getAllFile(filePath).getClassPropertiesSet();
 
 
-        System.out.println(allClass);
-//        for(classProperties pack: allClass)
-//        System.out.println(pack.getName());
+//        System.out.println(allClass);
+        for(classProperties pack: allClass)
+        System.out.println(pack.getName());
     }
 }
