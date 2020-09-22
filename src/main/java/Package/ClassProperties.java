@@ -2,6 +2,7 @@ package Package;
 
 import Class.*;
 import Model.NamedEntity;
+import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,9 @@ public class ClassProperties extends NamedEntity {
         this.consName = consName;
     }
 
-    public void setUpDependency(List<Modifier> mods)
+    public void setUpDependency(List<Dependency> mods)
     {
-        this.setModifiers(mods);
+        super.setDependencies(mods);
     }
 
 
@@ -71,6 +72,22 @@ public class ClassProperties extends NamedEntity {
 
     public void print()
     {
+
+        if(!super.getModifiers().isEmpty())
+        {
+            for(Object obj : super.getModifiers())
+            {
+                if(obj instanceof Annotation)
+                {
+                    System.out.println(obj.toString());
+                }
+                if(obj instanceof Modifier)
+                {
+                    System.out.print(((Modifier) obj).getKeyword() + " ");
+                }
+            }
+        }
+
         System.out.println(super.getName());
 
 

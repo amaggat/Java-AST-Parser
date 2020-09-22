@@ -32,6 +32,7 @@ public class JavaFileParser {
             public boolean visit(TypeDeclaration node) {
                 buffer.setName(node.getName().getFullyQualifiedName());
                 buffer.setUpDependency(JavaSpringDependency(node.modifiers(), fileName));
+                buffer.setModifiers(node.modifiers());
                 return true;
             }
 

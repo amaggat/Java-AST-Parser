@@ -2,7 +2,10 @@ package Model;
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
 
+import Package.*;
 import org.eclipse.jdt.core.dom.Modifier;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class NamedEntity {
@@ -10,8 +13,9 @@ public abstract class NamedEntity {
     private String type = new String();
     private String name = new String();
     private int id;
-    private List<Modifier> Modifiers;
-    private String Annotation = new String();
+    private List<Modifier> Modifiers = new ArrayList<>();
+    private List<Dependency> dependencies = new ArrayList<>();
+
 
     public String getName() {
         return name;
@@ -45,11 +49,11 @@ public abstract class NamedEntity {
         this.type = type;
     }
 
-    public String getAnnotation() {
-        return Annotation;
+    public List<Dependency> getDependencies() {
+        return dependencies;
     }
 
-    public void setAnnotation(String annotation) {
-        Annotation = annotation;
+    public void setDependencies(List<Dependency> dependencies) {
+        this.dependencies = dependencies;
     }
 }
