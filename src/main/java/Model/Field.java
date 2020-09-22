@@ -17,4 +17,9 @@ public class Field extends NamedEntity{
 
         return super.getModifiers() + " " + super.getName() + ": " + super.getType();
     }
+
+    public void print()
+    {
+        System.out.println("Field: " + super.getName() + " " + super.getType() + " " + super.getModifiers());
+    }
 }

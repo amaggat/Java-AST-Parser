@@ -22,4 +22,9 @@ public class Constructor extends NamedEntity{
     public void setParameters(List<String> parameters) {
         this.parameters = parameters;
     }
+
+    public void print()
+    {
+        System.out.println("Constructor: " + super.getName() + " " + this.getParameters() + " " + super.getModifiers());
+    }
 }

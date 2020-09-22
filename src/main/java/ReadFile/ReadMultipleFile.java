@@ -2,17 +2,15 @@ package ReadFile;
 
 import Model.*;
 import com.google.common.io.Files;
-import org.eclipse.jdt.core.dom.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReadMultipleFile {
 
     private List<File> allJavaFile;
 
-    packageProperties IPackage =new packageProperties();
+    PackageProperties IPackage =new PackageProperties();
     JavaFileParser parser = new JavaFileParser();
 
     public ReadMultipleFile() {
@@ -32,7 +30,7 @@ public class ReadMultipleFile {
         return sb.toString();
     }
 
-    public packageProperties getAllFile (String directoryPath) throws FileNotFoundException, IOException
+    public PackageProperties getAllFile (String directoryPath) throws FileNotFoundException, IOException
     {
 
         File folder = new File(directoryPath);
@@ -45,7 +43,7 @@ public class ReadMultipleFile {
             {
                 if(Files.getFileExtension(file.getName()).equals("java"))
                 {
-                    System.out.println(file.getName());
+//                    System.out.println(file.getName());
                     IPackage.addClassProperty(parser.visit(file.getPath(), file.getName()));
                 }
             }

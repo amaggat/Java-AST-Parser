@@ -28,4 +28,9 @@ public class Method extends NamedEntity{
         this.parameters = parameters;
     }
 
+    public void print()
+    {
+        System.out.println("Method: " + super.getType() + " " + super.getName() + " " + this.getParameters() + " " + super.getModifiers());
+    }
+
 }

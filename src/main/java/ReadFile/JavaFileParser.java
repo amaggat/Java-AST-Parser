@@ -12,10 +12,10 @@ public class JavaFileParser {
 
     final ArrayList<String> annotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
 
-    public classProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
+    public ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
-        final classProperties buffer = new classProperties();
-        final Set<Dependency> dependency = new HashSet<>();
+        final ClassProperties buffer = new ClassProperties();
+        final List<Dependency> dependency = new ArrayList<>();
         ReadMultipleFile getContent = new ReadMultipleFile();
 
         ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -28,6 +28,7 @@ public class JavaFileParser {
 
             @Override
             public boolean visit(TypeDeclaration node) {
+                buffer.setName(node.getName().getFullyQualifiedName());
                 buffer.setUpDependency(JavaSpringDependency(node.modifiers(), fileName));
                 return true;
             }
