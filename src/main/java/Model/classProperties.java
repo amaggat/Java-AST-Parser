@@ -1,6 +1,10 @@
 package Model;
 
+
+import org.eclipse.jdt.core.dom.Modifier;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class classProperties extends NamedEntity{
@@ -20,6 +24,12 @@ public class classProperties extends NamedEntity{
         this.fieldName = fieldName;
         this.consName = consName;
     }
+
+    public void setUpDependency(List<Modifier> mods)
+    {
+        this.setModifiers(mods);
+    }
+
 
     public Set<Method> getMethodName() {
         return methodName;

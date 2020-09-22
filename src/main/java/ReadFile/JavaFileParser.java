@@ -27,9 +27,9 @@ public class JavaFileParser {
         cu.accept(new ASTVisitor() {
 
             @Override
-            public boolean visit(TypeDeclaration node)
-            {
-                return false;
+            public boolean visit(TypeDeclaration node) {
+                buffer.setUpDependency(JavaSpringDependency(node.modifiers(), fileName));
+                return true;
             }
 
             @Override
@@ -54,6 +54,12 @@ public class JavaFileParser {
         });
 
         return buffer;
+    }
+
+    private Field JavaTypeParser(TypeDeclaration node, String fileName)
+    {
+
+        return null;
     }
 
     Method JavaMethodParser (MethodDeclaration node, String fileName)
@@ -91,10 +97,10 @@ public class JavaFileParser {
         return field;
     }
 
-    Set<Dependency> JavaSpringDependency(List<Modifier> node, String callName)
+    List<Dependency> JavaSpringDependency(List<Modifier> node, String callName)
     {
 
-        Set<Dependency> dep = new HashSet<>();
+        List<Dependency> dep = new ArrayList<>();
         List<Modifier> mod = node;
 
         if(!mod.isEmpty())
@@ -108,7 +114,7 @@ public class JavaFileParser {
                     if(annotationDependency.contains(type))
                     {
                         dep.add(new Dependency(type, callName));
-                        System.out.println(type);
+//                        System.out.println(type);
                     }
 
                 }
@@ -120,7 +126,7 @@ public class JavaFileParser {
                     if(annotationDependency.contains(type))
                     {
                         dep.add(new Dependency(type, callName));
-                        System.out.println(type + " " + value);
+//                        System.out.println(type + " " + value);
                     }
 
                 }
@@ -132,7 +138,7 @@ public class JavaFileParser {
                     if(annotationDependency.contains(type))
                     {
                         dep.add(new Dependency(value, callName, type));
-                        System.out.println(type + " " + value);
+//                        System.out.println(type + " " + value);
                     }
                 }
             }
@@ -164,4 +170,5 @@ public class JavaFileParser {
         }
         return parameterStrList;
     }
+
 }

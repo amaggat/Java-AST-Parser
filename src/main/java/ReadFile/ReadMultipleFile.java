@@ -47,13 +47,11 @@ public class ReadMultipleFile {
                 {
                     System.out.println(file.getName());
                     IPackage.addClassProperty(parser.visit(file.getPath(), file.getName()));
-                    System.out.println();
                 }
             }
             else if (file.isDirectory())
             {
                 getAllFile(file.getAbsolutePath());
-                System.out.println();
             }
         }
 
