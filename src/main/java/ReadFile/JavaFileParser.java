@@ -17,7 +17,7 @@ public class JavaFileParser {
     public ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
         final ClassProperties buffer = new ClassProperties();
-        final List<Dependency> annotationDependency = new ArrayList<>();
+        final List<Annotation> annotationDependency = new ArrayList<>();
         ReadMultipleFile getContent = new ReadMultipleFile();
 
         ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -60,12 +60,6 @@ public class JavaFileParser {
         return buffer;
     }
 
-    private Field JavaTypeParser(TypeDeclaration node, String fileName)
-    {
-
-        return null;
-    }
-
     Method JavaMethodParser (MethodDeclaration node, String fileName)
     {
         List<String> parameterStrList = JavaParameter(node);
@@ -101,10 +95,10 @@ public class JavaFileParser {
         return field;
     }
 
-    List<Dependency> JavaSpringDependency(List<Modifier> node, String callName)
+    List<JavaAnnotation> JavaSpringDependency(List<Modifier> node, String callName)
     {
 
-        List<Dependency> dep = new ArrayList<>();
+        List<JavaAnnotation> dep = new ArrayList<>();
 
         if(!node.isEmpty())
         {
@@ -116,7 +110,7 @@ public class JavaFileParser {
 
                     if(springAnnotationDependency.contains(type))
                     {
-                        dep.add(new Dependency(type, callName));
+                        dep.add(new JavaAnnotation(type, callName));
 //                        System.out.println(type);
                     }
 
@@ -128,7 +122,7 @@ public class JavaFileParser {
 
                     if(springAnnotationDependency.contains(type))
                     {
-                        dep.add(new Dependency(type, callName));
+                        dep.add(new JavaAnnotation(type, callName));
 //                        System.out.println(type + " " + value);
                     }
 
@@ -140,7 +134,7 @@ public class JavaFileParser {
 
                     if(springAnnotationDependency.contains(type))
                     {
-                        dep.add(new Dependency(value, callName, type));
+                        dep.add(new JavaAnnotation(value, callName, type));
 //                        System.out.println(type + " " + value);
                     }
                 }

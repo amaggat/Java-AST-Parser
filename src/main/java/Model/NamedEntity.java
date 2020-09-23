@@ -13,7 +13,7 @@ public abstract class NamedEntity {
     private String name = new String();
     private int id;
     private List<Modifier> Modifiers = new ArrayList<>();
-    private List<Dependency> dependencies = new ArrayList<>();
+    private List<JavaAnnotation> dependencies = new ArrayList<>();
 
 
     public String getName() {
@@ -48,11 +48,11 @@ public abstract class NamedEntity {
         this.type = type;
     }
 
-    public List<Dependency> getDependencies() {
+    public List<JavaAnnotation> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(List<Dependency> dependencies) {
+    public void setDependencies(List<JavaAnnotation> dependencies) {
         this.dependencies = dependencies;
     }
 }

@@ -7,29 +7,29 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Dependency {
+public class JavaAnnotation {
 
     String value = new String();
     String callClass = new String();
     String typeName = new String();
     List<MemberValuePair> valueInMarkerAnnotation = new LinkedList<>();
 
-    public Dependency()
+    public JavaAnnotation()
     {
 
     }
-    public Dependency(String value, String callClass) {
+    public JavaAnnotation(String value, String callClass) {
         this.value = value;
         this.callClass = callClass;
     }
 
-    public Dependency(String value, String callClass, String typeName) {
+    public JavaAnnotation(String value, String callClass, String typeName) {
         this.value = value;
         this.callClass = callClass;
         this.typeName = typeName;
     }
 
-    public Dependency(String callClass, String typeName, List<MemberValuePair> valueInMarkerAnnotation) {
+    public JavaAnnotation(String callClass, String typeName, List<MemberValuePair> valueInMarkerAnnotation) {
         this.callClass = callClass;
         this.typeName = typeName;
         this.valueInMarkerAnnotation = valueInMarkerAnnotation;
