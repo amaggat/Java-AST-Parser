@@ -1,4 +1,4 @@
 package Model;
 
-public class XmlNode {
+public class XmlNode extends Node{
 }

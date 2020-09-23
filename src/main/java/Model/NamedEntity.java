@@ -7,30 +7,11 @@ import org.eclipse.jdt.core.dom.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class NamedEntity {
+public abstract class NamedEntity extends Node{
 
     private String type = new String();
-    private String name = new String();
-    private int id;
     private List<Modifier> Modifiers = new ArrayList<>();
     private List<JavaAnnotation> dependencies = new ArrayList<>();
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public List<Modifier> getModifiers() {
         return Modifiers;
