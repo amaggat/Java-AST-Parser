@@ -78,7 +78,7 @@ public class ClassProperties extends NamedEntity {
         this.consName.add(cons);
     }
 
-    public void addSpringAnootation(List<SpringAnnotation> node)
+    public void addSpringAnnotation(List<SpringAnnotation> node)
     {
         springAnnotations.addAll(node);
     }

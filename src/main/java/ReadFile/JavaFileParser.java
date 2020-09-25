@@ -59,8 +59,7 @@ public class JavaFileParser {
             }
         });
 
-        buffer.addSpringAnootation(annotationDependency);
-
+        buffer.addSpringAnnotation(annotationDependency);
         return buffer;
     }
 
@@ -140,64 +139,91 @@ public class JavaFileParser {
             {
                 if(o instanceof MarkerAnnotation && ((MarkerAnnotation) o).isMarkerAnnotation())
                 {
-                    taglist.add(MarkerNode((MarkerAnnotation) o,callName));
+                    String type = ((MarkerAnnotation) o).getTypeName().toString();
+
+                    if(springAnnotationDependency.contains(type))
+                    {
+                        taglist.add(new SpringAnnotation(type, callName));
+                    }
                 }
                 else if(o instanceof NormalAnnotation && ((NormalAnnotation) o).isNormalAnnotation())
                 {
-                    taglist.add(NormalNode((NormalAnnotation) o, callName));
+                    String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
+                    List<MemberValuePair> value = ((NormalAnnotation) o).values();
+
+                    if(springAnnotationDependency.contains(type) )
+                    {
+                        if(type.equals("Autowired"))
+                        {
+                            taglist.add(new SpringAnnotation(type, callName, "class"));
+                        }
+                        else
+                        {
+                            taglist.add(new SpringAnnotation(type, callName));
+                        }
+                    }
                 }
                 else if(o instanceof SingleMemberAnnotation && ((SingleMemberAnnotation) o).isSingleMemberAnnotation())
                 {
-                    taglist.add(SingleMemberNode((SingleMemberAnnotation) o, callName));
+                    String value = ((SingleMemberAnnotation) o).getValue().toString();
+                    String type = ((SingleMemberAnnotation) o).getTypeName().toString();
+
+                    if(springAnnotationDependency.contains(type))
+                    {
+                        taglist.add(new SpringAnnotation(value, callName, type));
+                    }
                 }
             }
         }
         return taglist;
     }
 
-    public SpringAnnotation MarkerNode(MarkerAnnotation o, String callName)
-    {
-        String type = ((MarkerAnnotation) o).getTypeName().toString();
-
-        if(springAnnotationDependency.contains(type))
-        {
-//            taglist.add(new SpringAnnotation(type, callName));
+//    public SpringAnnotation MarkerNode(MarkerAnnotation o, String callName)
+//    {
+//        String type = ((MarkerAnnotation) o).getTypeName().toString();
+//
+//        if(springAnnotationDependency.contains(type))
+//        {
+////            taglist.add(new SpringAnnotation(type, callName));
+////            System.out.println(type);
+//            return new SpringAnnotation(type, callName);
+//        }
+//        return new SpringAnnotation();
+//    }
+//
+//    public SpringAnnotation SingleMemberNode(SingleMemberAnnotation o, String callName)
+//    {
+//        String value = ((SingleMemberAnnotation) o).getValue().toString();
+//        String type = ((SingleMemberAnnotation) o).getTypeName().toString();
+//
+//        if(springAnnotationDependency.contains(type))
+//        {
+//            System.out.println(type + " " + value);
+//            return new SpringAnnotation(value, callName, type);
+//        }
+//        return new SpringAnnotation();
+//    }
+//
+//    public SpringAnnotation NormalNode(NormalAnnotation o, String callName)
+//    {
+//        String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
+//        List<MemberValuePair> value = ((NormalAnnotation) o).values();
+//
+//
+//        if(springAnnotationDependency.contains(type) )
+//        {
 //            System.out.println(type);
-            return new SpringAnnotation(type, callName);
-        }
-        return null;
-    }
-
-    public SpringAnnotation SingleMemberNode(SingleMemberAnnotation o, String callName)
-    {
-        String value = ((SingleMemberAnnotation) o).getValue().toString();
-        String type = ((SingleMemberAnnotation) o).getTypeName().toString();
-
-        if(springAnnotationDependency.contains(type))
-        {
-            return new SpringAnnotation(value, callName, type);
-//          System.out.println(type + " " + value);
-        }
-        return null;
-    }
-
-    public SpringAnnotation NormalNode(NormalAnnotation o, String callName)
-    {
-        String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
-        List<MemberValuePair> value = ((NormalAnnotation) o).values();
-
-        if(springAnnotationDependency.contains(type) )
-        {
-            if(type.equals("Autowired"))
-            {
-                return new SpringAnnotation(type, callName, "class");
-            }
-            else
-            {
-                return new SpringAnnotation(type, callName);
-            }
-        }
-        return null;
-    }
+//
+//            if(type.equals("Autowired"))
+//            {
+//                return new SpringAnnotation(type, callName, "class");
+//            }
+//            else
+//            {
+//                return new SpringAnnotation(type, callName);
+//            }
+//        }
+//        return new SpringAnnotation();
+//    }
 
 }
