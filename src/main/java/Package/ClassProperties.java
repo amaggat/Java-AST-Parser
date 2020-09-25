@@ -12,6 +12,7 @@ public class ClassProperties extends NamedEntity {
     private List<Method> methodName = new ArrayList<>();
     private List<Field> fieldName = new ArrayList<>();
     private List<Constructor> consName = new ArrayList<>();
+    private List<SpringAnnotation> springAnnotations = new ArrayList<>();
 
     public ClassProperties()
     {
@@ -24,11 +25,19 @@ public class ClassProperties extends NamedEntity {
         this.consName = consName;
     }
 
-    public void setUpDependency(List<JavaAnnotation> mods)
+    public void setUpDependency(List<SpringAnnotation> mods)
     {
         super.setDependencies(mods);
     }
 
+
+    public List<SpringAnnotation> getSpringAnnotations() {
+        return springAnnotations;
+    }
+
+    public void setSpringAnnotations(List<SpringAnnotation> springAnnotations) {
+        this.springAnnotations = springAnnotations;
+    }
 
     public List<Method> getMethodName() {
         return methodName;
@@ -69,6 +78,11 @@ public class ClassProperties extends NamedEntity {
         this.consName.add(cons);
     }
 
+    public void addSpringAnootation(List<SpringAnnotation> node)
+    {
+        springAnnotations.addAll(node);
+    }
+
     public void print()
     {
 
@@ -89,18 +103,15 @@ public class ClassProperties extends NamedEntity {
 
         System.out.println(super.getName());
 
-
         for(Field field: fieldName)
         {
             field.print();
         }
 
-
         for(Constructor constructor: consName)
         {
             constructor.print();
         }
-
 
         for(Method method: methodName)
         {
@@ -108,6 +119,17 @@ public class ClassProperties extends NamedEntity {
         }
 
         System.out.println();
+    }
+
+    public void printAnnotations()
+    {
+        if(!springAnnotations.isEmpty())
+        {
+            for(SpringAnnotation node : springAnnotations)
+            {
+                node.print();
+            }
+        }
     }
 
 }

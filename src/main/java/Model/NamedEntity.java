@@ -11,7 +11,7 @@ public abstract class NamedEntity extends Node{
 
     private String type = new String();
     private List<Modifier> Modifiers = new ArrayList<>();
-    private List<JavaAnnotation> dependencies = new ArrayList<>();
+    private List<SpringAnnotation> dependencies = new ArrayList<>();
 
     public List<Modifier> getModifiers() {
         return Modifiers;
@@ -29,11 +29,11 @@ public abstract class NamedEntity extends Node{
         this.type = type;
     }
 
-    public List<JavaAnnotation> getDependencies() {
+    public List<SpringAnnotation> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(List<JavaAnnotation> dependencies) {
+    public void setDependencies(List<SpringAnnotation> dependencies) {
         this.dependencies = dependencies;
     }
 }

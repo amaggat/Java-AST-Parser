@@ -19,9 +19,9 @@ public class Main {
 
         for(ClassProperties classProperties : allClass)
         {
-            classProperties.print();
+//            classProperties.print();
+            classProperties.printAnnotations();
         }
-
 
     }
 }

@@ -1,4 +1,5 @@
 package Model;
 
-public class HtmlNode {
+public class HtmlNode extends Node{
+
 }

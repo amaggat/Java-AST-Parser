@@ -7,29 +7,38 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JavaAnnotation {
+public class SpringAnnotation {
 
     String value = new String();
     String callClass = new String();
+    String calledClass = new String();
     String typeName = new String();
     List<MemberValuePair> valueInMarkerAnnotation = new LinkedList<>();
 
-    public JavaAnnotation()
+    public SpringAnnotation()
     {
 
     }
-    public JavaAnnotation(String value, String callClass) {
+
+    public SpringAnnotation(String typeName, String callClass, String calledClass, String mode)
+    {
+        this.typeName = typeName;
+        this.callClass = callClass;
+        this.calledClass = calledClass;
+    }
+
+    public SpringAnnotation(String value, String callClass) {
         this.value = value;
         this.callClass = callClass;
     }
 
-    public JavaAnnotation(String value, String callClass, String typeName) {
+    public SpringAnnotation(String value, String callClass, String typeName) {
         this.value = value;
         this.callClass = callClass;
         this.typeName = typeName;
     }
 
-    public JavaAnnotation(String callClass, String typeName, List<MemberValuePair> valueInMarkerAnnotation) {
+    public SpringAnnotation(String callClass, String typeName, List<MemberValuePair> valueInMarkerAnnotation) {
         this.callClass = callClass;
         this.typeName = typeName;
         this.valueInMarkerAnnotation = valueInMarkerAnnotation;
@@ -41,6 +50,14 @@ public class JavaAnnotation {
 
     public void setValueInMarkerAnnotation(List<MemberValuePair> valueInMarkerAnnotation) {
         this.valueInMarkerAnnotation = valueInMarkerAnnotation;
+    }
+
+    public String getCalledClass() {
+        return calledClass;
+    }
+
+    public void setCalledClass(String calledClass) {
+        this.calledClass = calledClass;
     }
 
     public String getTypeName() {
@@ -65,6 +82,11 @@ public class JavaAnnotation {
 
     public void setCallClass(String callClass) {
         this.callClass = callClass;
+    }
+
+    public void print()
+    {
+        System.out.println(this.getCallClass() + " " + this.getTypeName() + " " + this.getValue());
     }
 
 }
