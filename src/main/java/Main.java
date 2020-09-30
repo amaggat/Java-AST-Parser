@@ -18,21 +18,31 @@ public class Main {
 
         SpringAnnotation springDep = new SpringAnnotation();
         String filePath = new String(inp.nextLine());
-        // /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
+        // Bản dài dòng: /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
+        // Bản tối ưu  : /home/amaggat/IdeaProjects/PetClinic-SpringBoot/src/main/java
 
         List<ClassProperties> allClass= readfile.getAllFile(filePath).getClassPropertiesSet();
         List<Dependency> AllDep = new ArrayList<>();
+        List<Dependency> AutowiredDep = new ArrayList<>();
+        List<Dependency> InheritanceDep = new ArrayList<>();
 
-        for(ClassProperties classProperties : allClass)
-        {
-            classProperties.print();
-            classProperties.printAnnotations();
-        }
+//        for(ClassProperties classProperties : allClass)
+//        {
+//            classProperties.print();
+//            classProperties.printAnnotations();
+//        }
 
         for(ClassProperties node: allClass)
         {
-            AllDep.addAll(depSolve.returnDependency(node.getSpringAnnotations()));
+            AutowiredDep.addAll(depSolve.returnAutowiredDependency(node.getSpringAnnotations()));
+            InheritanceDep.addAll(depSolve.returnInheritance(node));
         }
 
+        AllDep.addAll(depSolve.returnDependency(AutowiredDep, InheritanceDep));
+
+        for(Dependency obj : AllDep)
+        {
+            obj.print();
+        }
     }
 }

@@ -30,10 +30,11 @@ public class JavaFileParser {
 
             @Override
             public boolean visit(TypeDeclaration node) {
-                buffer.setName(fileName);
+                buffer.setName(node.getName().toString());
                 annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
                 buffer.setModifiers(node.modifiers());
-                buffer.setHeritance(node.superInterfaceTypes());
+                buffer.setInheritance(node.superInterfaceTypes());
+                if(node.isInterface()) System.out.println(node.getName());
                 return true;
             }
 

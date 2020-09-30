@@ -48,7 +48,8 @@ public class ReadMultipleFile {
                 if(Files.getFileExtension(file.getName()).equals("java"))
                 {
 //                    System.out.println(file.getName());
-                    IPackage.addClassProperty(parser.visit(file.getPath(), file.getName()));
+
+                    IPackage.addClassProperty(parser.visit(file.getPath(), Files.getNameWithoutExtension(file.getName())));
                 }
             }
             else if (file.isDirectory())

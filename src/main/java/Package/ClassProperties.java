@@ -16,7 +16,7 @@ public class ClassProperties extends NamedEntity {
     private List<Field> fieldName = new ArrayList<>();
     private List<Constructor> consName = new ArrayList<>();
     private List<SpringAnnotation> springAnnotations = new ArrayList<>();
-    private List<Type> Heritance = new ArrayList<>();
+    private List<Type> Inheritance = new ArrayList<>();
 
     public ClassProperties()
     {
@@ -87,12 +87,12 @@ public class ClassProperties extends NamedEntity {
         springAnnotations.addAll(node);
     }
 
-    public List<Type> getHeritance() {
-        return Heritance;
+    public List<Type> getInheritance() {
+        return Inheritance;
     }
 
-    public void setHeritance(List<Type> heritance) {
-        Heritance = heritance;
+    public void setInheritance(List<Type> inheritance) {
+        Inheritance = inheritance;
     }
 
     public void print()
@@ -115,10 +115,10 @@ public class ClassProperties extends NamedEntity {
 
         System.out.println(super.getName());
 
-        if(!this.getHeritance().isEmpty())
+        if(!this.getInheritance().isEmpty())
         {
             System.out.print("Inherit: ");
-            for(Object obj: this.getHeritance())
+            for(Object obj: this.getInheritance())
             {
                 if(obj instanceof SimpleType)
                     System.out.print(obj + " ");
