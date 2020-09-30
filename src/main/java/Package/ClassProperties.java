@@ -3,6 +3,9 @@ package Package;
 import Class.*;
 import Model.NamedEntity;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Type;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class ClassProperties extends NamedEntity {
     private List<Field> fieldName = new ArrayList<>();
     private List<Constructor> consName = new ArrayList<>();
     private List<SpringAnnotation> springAnnotations = new ArrayList<>();
+    private List<Type> Heritance = new ArrayList<>();
 
     public ClassProperties()
     {
@@ -83,9 +87,16 @@ public class ClassProperties extends NamedEntity {
         springAnnotations.addAll(node);
     }
 
+    public List<Type> getHeritance() {
+        return Heritance;
+    }
+
+    public void setHeritance(List<Type> heritance) {
+        Heritance = heritance;
+    }
+
     public void print()
     {
-
         if(!super.getModifiers().isEmpty())
         {
             for(Object obj : super.getModifiers())
@@ -101,22 +112,34 @@ public class ClassProperties extends NamedEntity {
             }
         }
 
+
         System.out.println(super.getName());
 
-        for(Field field: fieldName)
+        if(!this.getHeritance().isEmpty())
         {
-            field.print();
+            System.out.print("Inherit: ");
+            for(Object obj: this.getHeritance())
+            {
+                if(obj instanceof SimpleType)
+                    System.out.print(obj + " ");
+            }
+            System.out.println();
         }
 
-        for(Constructor constructor: consName)
-        {
-            constructor.print();
-        }
-
-        for(Method method: methodName)
-        {
-            method.print();
-        }
+//        for(Field field: fieldName)
+//        {
+//            field.print();
+//        }
+//
+//        for(Constructor constructor: consName)
+//        {
+//            constructor.print();
+//        }
+//
+//        for(Method method: methodName)
+//        {
+//            method.print();
+//        }
 
         System.out.println();
     }

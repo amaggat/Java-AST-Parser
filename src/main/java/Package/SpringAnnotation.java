@@ -11,7 +11,8 @@ public class SpringAnnotation {
 
     String value = new String();
     String callClass = new String();
-    String calledClass = new String();
+    List<String> calledClass = new ArrayList<>();
+
     String typeName = new String();
     List<MemberValuePair> valueInMarkerAnnotation = new LinkedList<>();
 
@@ -20,7 +21,7 @@ public class SpringAnnotation {
 
     }
 
-    public SpringAnnotation(String typeName, String callClass, String calledClass, String mode)
+    public SpringAnnotation(String typeName, String callClass, List<String> calledClass, String mode)
     {
         this.typeName = typeName;
         this.callClass = callClass;
@@ -38,7 +39,7 @@ public class SpringAnnotation {
         this.typeName = typeName;
     }
 
-    public SpringAnnotation(String callClass, String typeName, List<MemberValuePair> valueInMarkerAnnotation) {
+    public SpringAnnotation(String typeName,String callClass, List<MemberValuePair> valueInMarkerAnnotation) {
         this.callClass = callClass;
         this.typeName = typeName;
         this.valueInMarkerAnnotation = valueInMarkerAnnotation;
@@ -52,11 +53,11 @@ public class SpringAnnotation {
         this.valueInMarkerAnnotation = valueInMarkerAnnotation;
     }
 
-    public String getCalledClass() {
+    public List<String> getCalledClass() {
         return calledClass;
     }
 
-    public void setCalledClass(String calledClass) {
+    public void setCalledClass(List<String> calledClass) {
         this.calledClass = calledClass;
     }
 
@@ -86,7 +87,7 @@ public class SpringAnnotation {
 
     public void print()
     {
-        System.out.println(this.getCallClass() + " " + this.getTypeName() + " " + this.getValue());
+        System.out.println(this.getCallClass() + " " + this.getTypeName() + " " + this.getValue() + " " + this.getValueInMarkerAnnotation() + " " + this.getCalledClass());
     }
 
 }

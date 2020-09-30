@@ -33,12 +33,14 @@ public class JavaFileParser {
                 buffer.setName(fileName);
                 annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
                 buffer.setModifiers(node.modifiers());
+                buffer.setHeritance(node.superInterfaceTypes());
                 return true;
             }
 
             @Override
             public boolean visit(FieldDeclaration node) {
                 buffer.addField(JavaFieldParser(node, fileName));
+                annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
                 return false;
             }
 
@@ -70,8 +72,8 @@ public class JavaFileParser {
         String methodName = node.getName().toString();
 
         Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList);
-//        JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
-//        System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
+
+//      System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
         return method;
     }
 
@@ -81,8 +83,8 @@ public class JavaFileParser {
         String constructorName = node.getName().toString();
 
         Constructor cons = new Constructor(constructorName, parameterStrList, node.modifiers());
-//        JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
-//        System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
+
+//      System.out.println("Constructor: " + cons.getModifiers() + " " + cons.getName() + " " + cons.getParameters());
         return cons;
     }
 
@@ -93,8 +95,8 @@ public class JavaFileParser {
         String fieldType = node.getType().toString();
 
         Field field = new Field(fieldType, fieldName ,node.modifiers());
-//       JavaSpringDependency((List<Modifier>)node.modifiers(), fileName);
-//        System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
+
+//      System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
         return field;
     }
 
@@ -143,8 +145,31 @@ public class JavaFileParser {
 
                     if(springAnnotationDependency.contains(type))
                     {
-                        taglist.add(new SpringAnnotation(type, callName));
+                        if(type.equals("Autowired"))
+                        {
+                            if(module instanceof MethodDeclaration)
+
+                                taglist.add(new SpringAnnotation(type, callName, JavaParameter((MethodDeclaration) module), "Autowired"));
+
+                            if(module instanceof FieldDeclaration)
+                            {
+                                List<String> parameters = new ArrayList<>();
+                                parameters.add(((FieldDeclaration) module).getType().toString());
+                                taglist.add(new SpringAnnotation(type, callName, parameters, "Autowired"));
+                            }
+                            if(module instanceof TypeDeclaration)
+                                taglist.add(new SpringAnnotation(type, callName));
+                        }
+                        else
+                        {
+                            taglist.add(new SpringAnnotation(type, callName));
+                        }
                     }
+
+//                    if(springAnnotationDependency.contains(type))
+//                    {
+//                        taglist.add(new SpringAnnotation(type, callName));
+//                    }
                 }
                 else if(o instanceof NormalAnnotation && ((NormalAnnotation) o).isNormalAnnotation())
                 {
@@ -153,14 +178,7 @@ public class JavaFileParser {
 
                     if(springAnnotationDependency.contains(type) )
                     {
-                        if(type.equals("Autowired"))
-                        {
-                            taglist.add(new SpringAnnotation(type, callName, "class"));
-                        }
-                        else
-                        {
-                            taglist.add(new SpringAnnotation(type, callName));
-                        }
+                        taglist.add(new SpringAnnotation(type, callName, value));
                     }
                 }
                 else if(o instanceof SingleMemberAnnotation && ((SingleMemberAnnotation) o).isSingleMemberAnnotation())
@@ -177,53 +195,5 @@ public class JavaFileParser {
         }
         return taglist;
     }
-
-//    public SpringAnnotation MarkerNode(MarkerAnnotation o, String callName)
-//    {
-//        String type = ((MarkerAnnotation) o).getTypeName().toString();
-//
-//        if(springAnnotationDependency.contains(type))
-//        {
-////            taglist.add(new SpringAnnotation(type, callName));
-////            System.out.println(type);
-//            return new SpringAnnotation(type, callName);
-//        }
-//        return new SpringAnnotation();
-//    }
-//
-//    public SpringAnnotation SingleMemberNode(SingleMemberAnnotation o, String callName)
-//    {
-//        String value = ((SingleMemberAnnotation) o).getValue().toString();
-//        String type = ((SingleMemberAnnotation) o).getTypeName().toString();
-//
-//        if(springAnnotationDependency.contains(type))
-//        {
-//            System.out.println(type + " " + value);
-//            return new SpringAnnotation(value, callName, type);
-//        }
-//        return new SpringAnnotation();
-//    }
-//
-//    public SpringAnnotation NormalNode(NormalAnnotation o, String callName)
-//    {
-//        String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
-//        List<MemberValuePair> value = ((NormalAnnotation) o).values();
-//
-//
-//        if(springAnnotationDependency.contains(type) )
-//        {
-//            System.out.println(type);
-//
-//            if(type.equals("Autowired"))
-//            {
-//                return new SpringAnnotation(type, callName, "class");
-//            }
-//            else
-//            {
-//                return new SpringAnnotation(type, callName);
-//            }
-//        }
-//        return new SpringAnnotation();
-//    }
 
 }

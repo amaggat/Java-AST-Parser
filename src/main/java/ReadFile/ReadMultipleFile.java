@@ -2,6 +2,7 @@ package ReadFile;
 
 import Package.ClassProperties;
 import Project.PackageProperties;
+import Project.ProjectProperties;
 import com.google.common.io.Files;
 
 import java.io.*;
@@ -11,6 +12,8 @@ public class ReadMultipleFile {
 
     private List<File> allJavaFile;
 
+
+    ProjectProperties Iproject = new ProjectProperties();
     PackageProperties IPackage =new PackageProperties();
     JavaFileParser parser = new JavaFileParser();
 
