@@ -49,8 +49,17 @@ public class DependencySolver {
         return dep;
     }
 
-    public List<Dependency> returnDependency(List<Dependency> Autowired, List<Dependency> Inheritance)
+    public List<Dependency> returnDependency(List<ClassProperties> module)
     {
+        List<Dependency> Autowired = new ArrayList<>();
+        List<Dependency> Inheritance = new ArrayList<>();
+
+        for(ClassProperties node: module)
+        {
+            Autowired.addAll(returnAutowiredDependency(node.getSpringAnnotations()));
+            Inheritance.addAll(returnInheritance(node));
+        }
+
         List<Dependency> dep = new ArrayList<>();
 
         for(Dependency obj_a : Autowired)

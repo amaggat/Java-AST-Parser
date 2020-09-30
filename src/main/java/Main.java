@@ -21,10 +21,15 @@ public class Main {
         // Bản dài dòng: /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
         // Bản tối ưu  : /home/amaggat/IdeaProjects/PetClinic-SpringBoot/src/main/java
 
-        List<ClassProperties> allClass= readfile.getAllFile(filePath).getClassPropertiesSet();
+        List<ClassProperties> allClass = readfile.getAllFile(filePath).getClassPropertiesSet();
         List<Dependency> AllDep = new ArrayList<>();
-        List<Dependency> AutowiredDep = new ArrayList<>();
-        List<Dependency> InheritanceDep = new ArrayList<>();
+
+        AllDep.addAll(depSolve.returnDependency(allClass));
+
+        for(Dependency obj : AllDep)
+        {
+            obj.print();
+        }
 
 //        for(ClassProperties classProperties : allClass)
 //        {
@@ -32,17 +37,6 @@ public class Main {
 //            classProperties.printAnnotations();
 //        }
 
-        for(ClassProperties node: allClass)
-        {
-            AutowiredDep.addAll(depSolve.returnAutowiredDependency(node.getSpringAnnotations()));
-            InheritanceDep.addAll(depSolve.returnInheritance(node));
-        }
 
-        AllDep.addAll(depSolve.returnDependency(AutowiredDep, InheritanceDep));
-
-        for(Dependency obj : AllDep)
-        {
-            obj.print();
-        }
     }
 }
