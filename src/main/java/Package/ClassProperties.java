@@ -148,9 +148,12 @@ public class ClassProperties extends NamedEntity {
     {
         if(!springAnnotations.isEmpty())
         {
-            for(SpringAnnotation node : springAnnotations)
-            {
-                node.print();
+//            for(SpringAnnotation node : springAnnotations)
+//            {
+//                node.print();
+//            }
+            for(Method m : methodName){
+                m.print();
             }
         }
     }

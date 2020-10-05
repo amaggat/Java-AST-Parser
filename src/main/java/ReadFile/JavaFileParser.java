@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.*;
 
 import Package.*;
 import Class.*;
+import org.eclipse.jdt.internal.codeassist.complete.CompletionOnMethodReturnType;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -71,9 +72,23 @@ public class JavaFileParser {
         List<String> parameterStrList = JavaParameter(node);
         String returnType = node.getReturnType2().toString();
         String methodName = node.getName().toString();
+        final List<String> returnParam = new ArrayList<>();
 
-        Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList);
+        final Collection<ReturnStatement> returns = new ArrayList<ReturnStatement>();
+        ASTVisitor finder = new ASTVisitor() {
+            public boolean visit(ReturnStatement node) {
+                String result = node.toString();
+                returnParam.add(result);
+                return returns.add(node);
+            }
+        };
 
+        node.accept(finder);
+//
+//        if(returns.size()!=0) System.out.println(returns + " in Method: " + methodName + "\n");
+//        else System.out.println("No Return Statements On This Method: " + methodName + "()");
+
+        Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList, returnParam);
 //      System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
         return method;
     }
@@ -131,6 +146,33 @@ public class JavaFileParser {
             }
         }
         return parameterStrList;
+    }
+
+    List<String> ReturnParam(MethodDeclaration node){
+        List<String> returnParam = new ArrayList<>();
+        Block methodBody = node.getBody();
+        List<SingleVariableDeclaration> parameters = node.parameters();
+        if(methodBody != null) {
+            List<Statement> statements = methodBody.statements();
+            if(statements.size() == 1 && parameters.size() == 0) {
+                Statement statement = statements.get(0);
+                if(statement instanceof ReturnStatement) {
+                    ReturnStatement returnStatement = (ReturnStatement)statement;
+                    Expression returnStatementExpression = returnStatement.getExpression();
+//                    Expression ifReturnStatementExpression = returnStatement.getExpression();
+                    if(returnStatementExpression instanceof SimpleName) {
+                        String result = ((SimpleName) returnStatementExpression).toString();
+                        returnParam.add(result);
+                    }
+                    else if(returnStatementExpression instanceof SuperFieldAccess) {
+                        SuperFieldAccess fieldAccess = (SuperFieldAccess)returnStatementExpression;
+                        String result = fieldAccess.getName().toString();
+                        returnParam.add(result);
+                    }
+                }
+            }
+        }
+        return returnParam;
     }
 
     public List<SpringAnnotation> findAnnotation(List<Modifier> node, String callName, ASTNode module)

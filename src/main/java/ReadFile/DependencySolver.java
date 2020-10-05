@@ -34,12 +34,9 @@ public class DependencySolver {
     {
         List<Dependency> dep = new ArrayList<>();
 
-        if(!module.getInheritance().isEmpty())
-        {
-            for(Object o : module.getInheritance())
-            {
-                if(o instanceof SimpleType)
-                {
+        if(!module.getInheritance().isEmpty()) {
+            for(Object o : module.getInheritance()) {
+                if(o instanceof SimpleType) {
 //                    System.out.println(module.getName() + " " + o.toString());
                     dep.add(new Dependency(module.getName(), o.toString(), "Inheritance"));
                 }
@@ -54,20 +51,16 @@ public class DependencySolver {
         List<Dependency> Autowired = new ArrayList<>();
         List<Dependency> Inheritance = new ArrayList<>();
 
-        for(ClassProperties node: module)
-        {
+        for(ClassProperties node: module) {
             Autowired.addAll(returnAutowiredDependency(node.getSpringAnnotations()));
             Inheritance.addAll(returnInheritance(node));
         }
 
         List<Dependency> dep = new ArrayList<>();
 
-        for(Dependency obj_a : Autowired)
-        {
-            for(Dependency obj_i: Inheritance)
-            {
-                if(obj_a.getCalledClass().equals(obj_i.getCalledClass()))
-                {
+        for(Dependency obj_a : Autowired) {
+            for(Dependency obj_i: Inheritance) {
+                if(obj_a.getCalledClass().equals(obj_i.getCalledClass())) {
                     dep.add(new Dependency(obj_i.getCallClass(), obj_a.getCallClass()));
                 }
             }

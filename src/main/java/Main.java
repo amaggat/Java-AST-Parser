@@ -17,7 +17,8 @@ public class Main {
         DependencySolver depSolve = new DependencySolver();
 
         SpringAnnotation springDep = new SpringAnnotation();
-        String filePath = new String(inp.nextLine());
+//        String filePath = new String(inp.nextLine());
+        String filePath = new String("/Users/apple/Desktop/spring-framework-petclinic");
         // Bản dài dòng: /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
         // Bản tối ưu  : /home/amaggat/IdeaProjects/PetClinic-SpringBoot/src/main/java
 
@@ -31,11 +32,14 @@ public class Main {
             obj.print();
         }
 
-//        for(ClassProperties classProperties : allClass)
-//        {
-//            classProperties.print();
-//            classProperties.printAnnotations();
-//        }
+        System.out.println("\n\n\n");
+
+        for(ClassProperties classProperties : allClass)
+        {
+            classProperties.print();
+            classProperties.printAnnotations();
+            System.out.println("\n");
+        }
 
 
     }
