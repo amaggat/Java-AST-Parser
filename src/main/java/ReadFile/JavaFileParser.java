@@ -4,7 +4,7 @@ import org.eclipse.jdt.core.dom.*;
 
 import Package.*;
 import Class.*;
-import org.eclipse.jdt.internal.codeassist.complete.CompletionOnMethodReturnType;
+import Class.Constructor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,9 +13,9 @@ import java.util.*;
 
 public class JavaFileParser {
 
-    final ArrayList<String> springAnnotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
+    final static ArrayList<String> springAnnotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
 
-    public ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
+    public static ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
         final ClassProperties buffer = new ClassProperties();
         final List<SpringAnnotation> annotationDependency = new ArrayList<>();
@@ -67,33 +67,25 @@ public class JavaFileParser {
         return buffer;
     }
 
-    Method JavaMethodParser (MethodDeclaration node, String fileName)
+    public static Method JavaMethodParser (MethodDeclaration node, String fileName)
     {
         List<String> parameterStrList = JavaParameter(node);
         String returnType = node.getReturnType2().toString();
         String methodName = node.getName().toString();
-        final List<String> returnParam = new ArrayList<>();
-
-        final Collection<ReturnStatement> returns = new ArrayList<ReturnStatement>();
-        ASTVisitor finder = new ASTVisitor() {
-            public boolean visit(ReturnStatement node) {
-                String result = node.toString();
-                returnParam.add(result);
-                return returns.add(node);
-            }
-        };
-
-        node.accept(finder);
-//
-//        if(returns.size()!=0) System.out.println(returns + " in Method: " + methodName + "\n");
-//        else System.out.println("No Return Statements On This Method: " + methodName + "()");
-
-        Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList, returnParam);
+        List<ReturnStatement> returnStatements =  ReturnStatement(node);
+        List<StringLiteral> stringLiterals = StringLiteral(node);
+        String className = fileName;
+        Method method = new Method(returnType, methodName, node.modifiers(), parameterStrList, returnStatements, className, stringLiterals);
 //      System.out.println("Method: " + method.getModifiers() + " " + method.getType() + " " + method.getName() + " " + method.getParameters());
         return method;
     }
 
-    Constructor JavaConstructorParser(MethodDeclaration node, String fileName)
+    public static boolean isCalledByController(ReturnStatement returnStatement, List<Constructor> constructors){
+        System.out.println(returnStatement.getExpression());
+        return true;
+    }
+
+    public static Constructor JavaConstructorParser(MethodDeclaration node, String fileName)
     {
         List<String> parameterStrList = JavaParameter(node);
         String constructorName = node.getName().toString();
@@ -104,7 +96,7 @@ public class JavaFileParser {
         return cons;
     }
 
-    Field JavaFieldParser(FieldDeclaration node, String fileName)
+    public static Field JavaFieldParser(FieldDeclaration node, String fileName)
     {
         VariableDeclaration z = (VariableDeclaration) node.fragments().get(0);
         String fieldName = z.getName().toString();
@@ -116,14 +108,14 @@ public class JavaFileParser {
         return field;
     }
 
-    List<SpringAnnotation> JavaSpringDependency(List<Modifier> node, String callName, ASTNode module)
+    public static List<SpringAnnotation> JavaSpringDependency(List<Modifier> node, String callName, ASTNode module)
     {
         List<SpringAnnotation> dep = new ArrayList<>();
         dep.addAll(findAnnotation(node, callName, module));
         return dep;
     }
 
-    List<String> JavaParameter(MethodDeclaration node)
+    public static List<String> JavaParameter(MethodDeclaration node)
     {
         List param = node.parameters();
         List<String> parameterStrList = new ArrayList<>();
@@ -148,34 +140,35 @@ public class JavaFileParser {
         return parameterStrList;
     }
 
-    List<String> ReturnParam(MethodDeclaration node){
-        List<String> returnParam = new ArrayList<>();
-        Block methodBody = node.getBody();
-        List<SingleVariableDeclaration> parameters = node.parameters();
-        if(methodBody != null) {
-            List<Statement> statements = methodBody.statements();
-            if(statements.size() == 1 && parameters.size() == 0) {
-                Statement statement = statements.get(0);
-                if(statement instanceof ReturnStatement) {
-                    ReturnStatement returnStatement = (ReturnStatement)statement;
-                    Expression returnStatementExpression = returnStatement.getExpression();
-//                    Expression ifReturnStatementExpression = returnStatement.getExpression();
-                    if(returnStatementExpression instanceof SimpleName) {
-                        String result = ((SimpleName) returnStatementExpression).toString();
-                        returnParam.add(result);
-                    }
-                    else if(returnStatementExpression instanceof SuperFieldAccess) {
-                        SuperFieldAccess fieldAccess = (SuperFieldAccess)returnStatementExpression;
-                        String result = fieldAccess.getName().toString();
-                        returnParam.add(result);
-                    }
-                }
+    public static List<ReturnStatement> ReturnStatement(MethodDeclaration node){
+        final List<ReturnStatement> returnParam = new ArrayList<>();
+        final Collection<Statement> returns = new ArrayList<>();
+        ASTVisitor finder = new ASTVisitor() {
+            public boolean visit(ReturnStatement node) {
+                ReturnStatement result = node;
+                returnParam.add(node);
+                return returns.add(node);
             }
-        }
+        };
+        node.accept(finder);
         return returnParam;
     }
 
-    public List<SpringAnnotation> findAnnotation(List<Modifier> node, String callName, ASTNode module)
+    public static List<StringLiteral> StringLiteral(MethodDeclaration node){
+        final List<StringLiteral> returnParam = new ArrayList<>();
+        final Collection<StringLiteral> returns = new ArrayList<>();
+        ASTVisitor finder = new ASTVisitor() {
+            public boolean visit(StringLiteral node) {
+                StringLiteral result = node;
+                returnParam.add(node);
+                return returns.add(node);
+            }
+        };
+        node.accept(finder);
+        return returnParam;
+    }
+
+    public static List<SpringAnnotation> findAnnotation(List<Modifier> node, String callName, ASTNode module)
     {
         List<SpringAnnotation> taglist = new ArrayList<>();
         if(!node.isEmpty())

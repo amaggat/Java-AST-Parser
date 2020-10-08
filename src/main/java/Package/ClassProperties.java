@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.dom.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ClassProperties extends NamedEntity {
 
     private List<Method> methodName = new ArrayList<>();
@@ -18,8 +17,7 @@ public class ClassProperties extends NamedEntity {
     private List<SpringAnnotation> springAnnotations = new ArrayList<>();
     private List<Type> Inheritance = new ArrayList<>();
 
-    public ClassProperties()
-    {
+    public ClassProperties() {
 
     }
 
@@ -31,9 +29,8 @@ public class ClassProperties extends NamedEntity {
 
     public void setUpDependency(List<SpringAnnotation> mods)
     {
-        super.setDependencies(mods);
+        super.setSpringDependencies(mods);
     }
-
 
     public List<SpringAnnotation> getSpringAnnotations() {
         return springAnnotations;
@@ -126,32 +123,41 @@ public class ClassProperties extends NamedEntity {
             System.out.println();
         }
 
-//        for(Field field: fieldName)
-//        {
-//            field.print();
-//        }
-//
-//        for(Constructor constructor: consName)
-//        {
-//            constructor.print();
-//        }
-//
-//        for(Method method: methodName)
-//        {
-//            method.print();
-//        }
+        System.out.println("--- Field Name ---");
+
+        for(Field field: fieldName)
+        {
+            field.print();
+        }
+
+        System.out.println("--- End Field Name ---\n--- Constructor ---" );
+
+        for(Constructor constructor: consName)
+        {
+            constructor.print();
+        }
+
+        System.out.println("--- End Constructor --- \n --- Method Name ---");
+
+        for(Method method: methodName)
+        {
+            method.print();
+        }
+
+        System.out.println("--- End Constructor ---");
 
         System.out.println();
     }
+
 
     public void printAnnotations()
     {
         if(!springAnnotations.isEmpty())
         {
-//            for(SpringAnnotation node : springAnnotations)
-//            {
-//                node.print();
-//            }
+            for(SpringAnnotation node : springAnnotations)
+            {
+                node.print();
+            }
             for(Method m : methodName){
                 m.print();
             }

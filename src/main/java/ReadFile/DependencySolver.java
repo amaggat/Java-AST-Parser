@@ -2,8 +2,9 @@ package ReadFile;
 
 import Package.*;
 import Project.Dependency;
-import org.eclipse.jdt.core.dom.SimpleType;
-import org.eclipse.jdt.core.dom.Type;
+import Class.Method;
+import org.eclipse.jdt.core.dom.*;
+import Class.Constructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +14,16 @@ public class DependencySolver {
     public List<Dependency> returnAutowiredDependency(List<SpringAnnotation> module)
     {
         List<Dependency> dep = new ArrayList<>();
-
-        for(SpringAnnotation obj : module)
-        {
-            if(obj.getTypeName().equals("Autowired"))
-            {
-                for(String node : obj.getCalledClass())
-                {
+        for(SpringAnnotation obj : module) {
+            if(obj.getTypeName().equals("Autowired")) {
+                for(String node : obj.getCalledClass()) {
 //                    System.out.println(obj.getCallClass() + " " + node);
                     dep.add(new Dependency(obj.getCallClass(),node, "Autowired"));
                 }
             }
         }
-
         return dep;
     }
-
 
     public List<Dependency> returnInheritance(ClassProperties module)
     {
@@ -68,5 +63,26 @@ public class DependencySolver {
 
         return dep;
     }
+
+    public List<Dependency> returnControllerDep(List<ClassProperties> module, ReturnStatement statement){
+        List<Method> methods = new ArrayList<>();
+        List<Dependency> dep = new ArrayList<>();
+        for(ClassProperties node : module){
+            List<Method> s = node.getMethodName();
+//            System.out.println("------Test-------");
+//            s.forEach(t -> {
+//                methods.add(t);
+//            });
+//            s.forEach(m -> {
+//                System.out.println("Class: " + m.getClassName() + " ---> method: " + m.getName() + "()");
+//            });
+//            System.out.println("------End Test-------\n\n\n");
+        }
+        for(Method method : methods){
+            //code here
+        }
+        return dep;
+    }
+
 }
 

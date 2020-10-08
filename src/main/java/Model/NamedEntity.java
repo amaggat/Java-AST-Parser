@@ -29,11 +29,11 @@ public abstract class NamedEntity extends Node{
         this.type = type;
     }
 
-    public List<SpringAnnotation> getDependencies() {
+    public List<SpringAnnotation> getSpringDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(List<SpringAnnotation> dependencies) {
+    public void setSpringDependencies(List<SpringAnnotation> dependencies) {
         this.dependencies = dependencies;
     }
 }
