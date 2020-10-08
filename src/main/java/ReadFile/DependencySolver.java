@@ -45,6 +45,7 @@ public class DependencySolver {
     {
         List<Dependency> Autowired = new ArrayList<>();
         List<Dependency> Inheritance = new ArrayList<>();
+//        List<Dependency>
 
         for(ClassProperties node: module) {
             Autowired.addAll(returnAutowiredDependency(node.getSpringAnnotations()));
@@ -83,6 +84,9 @@ public class DependencySolver {
         }
         return dep;
     }
+
+    //Repo
+
 
 }
 

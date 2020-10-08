@@ -23,7 +23,7 @@ public class Main {
 
         SpringAnnotation springDep = new SpringAnnotation();
 //        String filePath = new String(inp.nextLine());
-        String filePath = new String("/Users/apple/Desktop/code/spring-framework-petclinic");
+        String filePath = new String("C:/Users/ACER/Desktop/spring-petclinic-framework/src/main/java/org/springframework/samples/petclinic/repository");
         // Bản dài dòng: /home/amaggat/IdeaProjects/Spring-Petclinic/src/main
         // Bản tối ưu  : /home/amaggat/IdeaProjects/PetClinic-SpringBoot/src/main/java
 
@@ -43,9 +43,9 @@ public class Main {
 
         for(ClassProperties classProp : allClass){
             List<Method> tmp = classProp.getMethodName();
-            tmp.forEach(m -> {
+            for (Method m : tmp) {
                 methods.add(m);
-            });
+            }
             System.out.println();
         }
 
@@ -79,7 +79,7 @@ public class Main {
         System.out.println("\n\n\n\n\n\n\n\n-----XML File Parser-----");
         IPathParser parser = new XmlFileParser();
         Node parsedNode = null;
-        parsedNode = parser.parse("/Users/apple/Desktop/code/spring-framework-petclinic/src/main/resources/spring/mvc-view-config.xml");
+        parsedNode = parser.parse("C:/Users/ACER/Desktop/spring-petclinic-framework/src/main/resources/spring/mvc-view-config.xml");
         System.out.println("-----End XML File Parser-----");
     }
 }

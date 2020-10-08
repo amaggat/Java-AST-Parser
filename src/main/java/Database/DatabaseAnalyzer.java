@@ -1,5 +1,7 @@
-package ReadFile;
+package Database;
 
+
+import ReadFile.ReadMultipleFile;
 import org.eclipse.jdt.core.dom.*;
 
 import Package.*;
@@ -11,10 +13,11 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class JavaFileParser {
+public class DatabaseAnalyzer {
 
-    final static ArrayList<String> springAnnotationDependency = new ArrayList<String>( Arrays.asList("GetMapping", "PostMapping", "Controller", "Service", "Repository", "RequestMapping", "Autowired") );
-    final static ArrayList<String> persistentAnnotation = new ArrayList<>(Arrays.asList("Entity", "Table"));
+    final static ArrayList<String> persistentAnnotation = new ArrayList<>(Arrays.asList(
+            "Entity", "Table", "ManyToMany", "OneToOne", "ManyToOne"
+            ));
 
     public static ClassProperties visit(String filePath, final String fileName) throws FileNotFoundException, IOException
     {
@@ -33,7 +36,7 @@ public class JavaFileParser {
             @Override
             public boolean visit(TypeDeclaration node) {
                 buffer.setName(node.getName().toString());
-                annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
+//                annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
                 buffer.setModifiers(node.modifiers());
                 buffer.setInheritance(node.superInterfaceTypes());
                 if(node.isInterface()) System.out.println(node.getName());
@@ -43,7 +46,7 @@ public class JavaFileParser {
             @Override
             public boolean visit(FieldDeclaration node) {
                 buffer.addField(JavaFieldParser(node, fileName));
-                annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
+//                annotationDependency.addAll(JavaSpringDependency(node.modifiers(), fileName, node));
                 return false;
             }
 
@@ -53,12 +56,12 @@ public class JavaFileParser {
                 if(!node.isConstructor())
                 {
                     buffer.addMethod(JavaMethodParser(node, fileName));
-                    annotationDependency.addAll(JavaSpringDependency((List<Modifier>)node.modifiers(), fileName, node));
+//                    annotationDependency.addAll(JavaSpringDependency((List<Modifier>)node.modifiers(), fileName, node));
                 }
                 else
                 {
                     buffer.addCons(JavaConstructorParser(node, fileName));
-                    annotationDependency.addAll(JavaSpringDependency((List<Modifier>)node.modifiers(), fileName, node));
+//                    annotationDependency.addAll(JavaSpringDependency((List<Modifier>)node.modifiers(), fileName, node));
                 }
                 return false;
             }
@@ -107,13 +110,6 @@ public class JavaFileParser {
 
 //      System.out.println("Field: " + field.getModifiers() + " " + field.getType() + " " + field.getName());
         return field;
-    }
-
-    public static List<SpringAnnotation> JavaSpringDependency(List<Modifier> node, String callName, ASTNode module)
-    {
-        List<SpringAnnotation> dep = new ArrayList<>();
-        dep.addAll(findAnnotation(node, callName, module));
-        return dep;
     }
 
     public static List<String> JavaParameter(MethodDeclaration node)
@@ -169,69 +165,21 @@ public class JavaFileParser {
         return returnParam;
     }
 
-    public static List<SpringAnnotation> findAnnotation(List<Modifier> node, String callName, ASTNode module)
-    {
-        List<SpringAnnotation> taglist = new ArrayList<>();
-        if(!node.isEmpty())
-        {
-            for(Object o: node)
-            {
-                if(o instanceof MarkerAnnotation && ((MarkerAnnotation) o).isMarkerAnnotation())
-                {
+    public static List<DatabaseNode> collectDBNode(List<Modifier> nodes, String callname ,ASTNode module) {
+        List<HibernateAnnotation> hibernateAnnotations = new ArrayList<>();
+
+        if (!nodes.isEmpty()) {
+            for( Object o : nodes) {
+                if ((o instanceof MarkerAnnotation) && ((MarkerAnnotation) o).isMarkerAnnotation()) {
                     String type = ((MarkerAnnotation) o).getTypeName().toString();
+                    if (persistentAnnotation.contains(type)) {
 
-                    if(springAnnotationDependency.contains(type))
-                    {
-                        if(type.equals("Autowired"))
-                        {
-                            if(module instanceof MethodDeclaration)
-
-                                taglist.add(new SpringAnnotation(type, callName, JavaParameter((MethodDeclaration) module), "Autowired"));
-
-                            if(module instanceof FieldDeclaration)
-                            {
-                                List<String> parameters = new ArrayList<>();
-                                parameters.add(((FieldDeclaration) module).getType().toString());
-                                taglist.add(new SpringAnnotation(type, callName, parameters, "Autowired"));
-                            }
-                            if(module instanceof TypeDeclaration)
-                                taglist.add(new SpringAnnotation(type, callName));
-                        }
-                        else
-                        {
-                            taglist.add(new SpringAnnotation(type, callName));
-                        }
-                    }
-
-//                    if(springAnnotationDependency.contains(type))
-//                    {
-//                        taglist.add(new SpringAnnotation(type, callName));
-//                    }
-                }
-                else if(o instanceof NormalAnnotation && ((NormalAnnotation) o).isNormalAnnotation())
-                {
-                    String type = ((NormalAnnotation) o).getTypeName().getFullyQualifiedName();
-                    List<MemberValuePair> value = ((NormalAnnotation) o).values();
-
-                    if(springAnnotationDependency.contains(type) )
-                    {
-                        taglist.add(new SpringAnnotation(type, callName, value));
-                    }
-
-                }
-                else if(o instanceof SingleMemberAnnotation && ((SingleMemberAnnotation) o).isSingleMemberAnnotation())
-                {
-                    String value = ((SingleMemberAnnotation) o).getValue().toString();
-                    String type = ((SingleMemberAnnotation) o).getTypeName().toString();
-
-                    if(springAnnotationDependency.contains(type))
-                    {
-                        taglist.add(new SpringAnnotation(value, callName, type));
                     }
                 }
             }
         }
-        return taglist;
     }
 
+
 }
+
